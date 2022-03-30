@@ -1,0 +1,11 @@
+.abs_cam {
+    position:absolute; top:0px; left:0px;
+}
+
+.abs_canvas {
+    position:absolute; top:0px; left:0px;
+}
+
+.VideoLayer {
+    position:absolute; top:0px; left:0px;
+}

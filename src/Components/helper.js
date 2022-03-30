@@ -39,12 +39,32 @@ export const readKey = () => {
 
 }
 
+export const detectURL = function (str) {
+    const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    const regex = new RegExp(expression);
+
+    if (str.match(regex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export const get_url_extension = function (url) {
+    return url.split('.').pop().split(/\#|\?/)[0];
+}
+
 // to detect dynamic gesture like Air Tap using ring/circular buffer...
 export const createRingBuffer = function (length) {
     /* https://stackoverflow.com/a/4774081 */
     let pointer = 0, buffer = [];
 
     return {
+        avg: function () {
+            const sum = buffer.reduce((a, b) => a + b, 0);
+            const avg = (sum / buffer.length) || 0;
+            return avg;
+        },
         min: function () {
             // or Math.max(...array)
             return buffer.reduce(function (p, v) {

@@ -1,10 +1,10 @@
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import * as draw from "@mediapipe/drawing_utils";
 import * as HandsMediaPipe from "@mediapipe/hands";
 import {Camera} from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
 import './hands.css'
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
     setThumb,
     setLeftIndex,
@@ -14,19 +14,22 @@ import {
     setRightPinch,
     setMultiHand, setRightPointing, setLeftPointing, setRightPointingTwo, setLeftPointingTwo,
 } from '../app/handsReducer'
-import {setCamera} from "../app/colorReducer";
+import {selectObjectMode, setCamera} from "../app/colorReducer";
 import {dist, throttle} from "./helper";
 
-
-const showLandmarks = true
 
 // const throttleTime = 1000
 
 function HandsRecognition() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
-
+    const showLandmarks = useRef(true);
+    const objectMode = useSelector(selectObjectMode);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        showLandmarks.current = !objectMode;
+    }, [objectMode])
 
 
     const checkLandmarks = (landmarks, isRightHand) => {
@@ -131,7 +134,7 @@ function HandsRecognition() {
                     checkLandmarks(landmarks, isRightHand)
                 }, 0)
 
-                if (showLandmarks) {
+                if (showLandmarks.current) {
                     draw.drawConnectors(canvasCtx, landmarks, HandsMediaPipe.HAND_CONNECTIONS,
                         {color: isRightHand ? '#00FF00' : '#FF0000'});
 

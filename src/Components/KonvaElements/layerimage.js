@@ -7,10 +7,10 @@ import {Textual} from "./textual";
 
 export const LayerImage = (props) => {
     // 'https://konvajs.org/assets/lion.png'
-    const [image, status] = useImage(props.url, 'anonymous');
+    const [image, status] = useImage(props.url, undefined);
     const imageRef = useRef(null);
     const [scaleX, setScaleX] = useState(0);
-    const scaleProps = props.scale
+    // const scaleProps = props.scale
 
     useEffect(() => {
         if (imageRef.current !== null && status === 'loaded') {
@@ -23,11 +23,13 @@ export const LayerImage = (props) => {
         }
     }, [imageRef, status])
 
-    useEffect(() => {
-        setScaleX()
-    }, [scaleProps])
+    // useEffect(() => {
+    //     setScaleX()
+    // }, [scaleProps])
 
-    return <Image ref={imageRef} image={image} x={props.x} y={props.y}
-                  scale={{x: scaleX, y: scaleX}}/>;
+    return <Image ref={imageRef} image={image}
+                  // x={props.x} y={props.y}
+                  scale={{x: scaleX, y: scaleX}}
+    />;
 };
 

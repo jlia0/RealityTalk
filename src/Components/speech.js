@@ -10,25 +10,6 @@ const recognition = new SpeechRecognition()
 
 let finalTranscript = '';
 
-// Image Search
-
-// socket.on('search', function(json) {
-//     console.log(json)
-//     if (json.noResults) return false
-//     let description = json.results[0].description
-//     $('#result-description').text(description)
-//
-//     for (let image of json.images) {
-//         let cardEl = document.createElement('div')
-//         $(cardEl).addClass('card')
-//         let imageEl = document.createElement('img')
-//         $(imageEl).attr('src', image.image)
-//         $(imageEl).addClass('ui small image')
-//         $(cardEl).append(imageEl)
-//         $('#result-images').append(cardEl)
-//     }
-// })
-
 function Speech() {
     const dispatch = useDispatch();
 
@@ -38,14 +19,22 @@ function Speech() {
             let json = JSON.parse(data)
 
             // filter
-            // json.tokens = json.tokens.filter((token) => {
-            //     return (token.keyword_rank > 0 || token.ent_type !== '')
-            // })
+            json.tokens = json.tokens.filter((token) => {
+                return (token.keyword_rank > 0 || token.ent_type !== '')
+            })
 
             console.log(json.tokens)
 
             dispatch(setTokens(json.tokens))
         })
+
+        // image search
+        // socket.on('search', function (json) {
+        //     console.log(json)
+        //     if (json.noResults) return false
+        //     let description = json.results[0].description
+        //     console.log(description)
+        // })
 
         // Speech
         recognition.lang = 'en-US'
@@ -56,7 +45,6 @@ function Speech() {
         })
 
         recognition.onend = (event) => {
-            // console.log(event)
             recognition.start()
         }
 
@@ -114,7 +102,7 @@ function TestSpeech() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let defaultTranscript = "Hi, my name is Adnan Karim. I am a graduate student at the University of Calgary in the Department of Computer Science. Today, I want to talk about Real-time Augmented Presentation. As you can see when I talk about something, we can augment presentation using an augmented reality interface. We have several features, such as live kinetic typography, embedded icons, embedded visuals, as well as an embedded annotation to a physical object. All components are interactive with gestural interactions. And most importantly all animations happen in real-time. This means that no video editing or programming is required. Thus it can significantly reduce the time and efforts of making such an augmented presentation, but also expands the tremendous potential for real-time live presentations like classroom lectures. We believe these techniques can make the presentation more expressive and engaging. In this talk, I want to describe how we designed such a system and introduce a new system to describe how we implemented this demo."
+        let defaultTranscript = "Hi, my name is Adnan Karim. I am a graduate student at the University of Calgary in the Department of Computer Science. Today, I want to talk about Real-time Augmented Presentation demo. As you can see when I talk about something, we can augment presentation using an augmented reality interface. We have several features, such as live kinetic typography, embedded icons, embedded visuals, as well as an embedded annotation to a physical object. All components are interactive with gestural interactions. And most importantly all animations happen in real-time. This means that no video editing or programming is required. Thus it can significantly reduce the time and efforts of making such an augmented presentation, but also expands the tremendous potential for real-time live presentations like classroom lectures. We believe these techniques can make the presentation more expressive and engaging. In this talk, I want to describe how we designed such a system and introduce a new system to describe how we implemented this demo. And here's the object mode."
         defaultTranscript = defaultTranscript.replaceAll('.', '')
         defaultTranscript = defaultTranscript.replaceAll(',', '')
 

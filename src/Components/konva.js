@@ -1,7 +1,7 @@
 import {Stage, Layer, Rect, Circle, Image, Group, Text, Label, Tag, Line} from 'react-konva';
 import './konva.css'
 import {useEffect, useRef, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     selectThumb,
     selectLeftIndex,
@@ -11,11 +11,15 @@ import {
     selectRightPinch,
     selectMultiHand, selectLeftPointing, selectRightPointing, selectLeftPointingTwo, selectRightPointingTwo
 } from "../app/handsReducer";
-import {selectTokens} from "../app/speechReducer";
+import {selectInterimTranscript, selectTokens} from "../app/speechReducer";
 
 import {EmbeddedScreen} from "./KonvaElements/embeddedscreen";
-import {calc_angle, dist, findGroup, findLabel, getRandomNumber} from "./helper";
-import {ImageWithGroup, TextWithGroup} from "./visuals";
+import {calc_angle, detectURL, dist, findGroup, findLabel, get_url_extension, getRandomNumber} from "./helper";
+import {EmbedWithGroup, ImageWithGroup, TextWithGroup, VideoWithGroup} from "./visuals";
+import {selectResults} from "../app/mappingReducer";
+import {withGroup} from "./KonvaElements/groupwrapper";
+import {selectObjectMode, selectObjectPosX, selectObjectPosY, setObjectMode} from "../app/colorReducer";
+// import {socket} from "./speech";
 
 
 function KonvaLayer() {
@@ -31,6 +35,12 @@ function KonvaLayer() {
     const rightPointing = useSelector(selectRightPointing)
     const leftPointingTwo = useSelector(selectLeftPointingTwo)
     const rightPointingTwo = useSelector(selectRightPointingTwo)
+    const mappingResults = useSelector(selectResults)
+    const objectMode = useSelector(selectObjectMode)
+    const objectPosX = useSelector(selectObjectPosX)
+    const objectPosY = useSelector(selectObjectPosY)
+    const interimTranscript = useSelector(selectInterimTranscript)
+    const dispatch = useDispatch()
 
     // Gesture Interactions
     useEffect(() => {
@@ -93,6 +103,12 @@ function KonvaLayer() {
                                     labelY = isNaN(label.y()) ? 0 : label.y();
                                 }
 
+                                // list.forEach((ele) => {
+                                //     if (ele.text === node.attrs.text) {
+                                //         timeoutList.current[ele.index] = 60000;
+                                //     }
+                                // });
+
                                 group.x(actualX - (node.width() * group.scaleX() / 2) - labelX * group.scaleX())
                                 group.y(actualY - (node.height() * group.scaleY() / 2) - labelY * group.scaleY())
 
@@ -120,12 +136,79 @@ function KonvaLayer() {
 
     }, [leftPinch, rightPinch, leftIndex, rightIndex])
 
+    // tokens update
     useEffect(() => {
-        // let visuals = tokens.filter((ele, index) => {
-        //
-        // });
-        console.log(tokens)
+        const tempList = tokens.map((ele, index) => {
+            let type_temp = 'text';
+            let url_temp = '';
+            let timeout_temp = 4000;
+            let text_temp = ele.text;
+            mappingResults.every((mapping) => {
+                // find mapping
+                if (ele.text.toLowerCase().includes(mapping[0].toLowerCase())) {
+                    // if it's a URL - media mapping
+                    if (detectURL(mapping[1])) {
+                        const fileType = get_url_extension(mapping[1]);
+                        if (fileType === 'jpg' || fileType === 'png') {
+                            type_temp = 'image';
+                            timeout_temp = 300000;
+                            url_temp = mapping[1];
+                            return false;
+                        } else if (fileType === 'mp4') {
+                            type_temp = 'video';
+                            timeout_temp = 600000;
+                            url_temp = mapping[1];
+                            return false;
+                        } else {
+                            type_temp = 'embed';
+                            timeout_temp = 600000;
+                            url_temp = mapping[1];
+                            return false;
+                        }
+                    } else {
+                        switch (mapping[1]) {
+                            case 'object mode start':
+                                if (!interimTranscript.includes(mapping[0])) {
+                                    console.log('physical object mode start');
+                                    dispatch(setObjectMode(true));
+                                }
+                                break;
+                            case 'object mode end':
+                                if (!interimTranscript.includes(mapping[0])) {
+                                    console.log('physical object mode end');
+                                    dispatch(setObjectMode(false));
+                                }
+                                break;
+                            default:
+                                // user-defined text
+                                type_temp = 'text';
+                                text_temp = mapping[1];
+                                timeout_temp = 10000;
+                        }
+
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            return {
+                text: text_temp,
+                ent_type: ele.ent_type,
+                timeout: timeout_temp,
+                index: index,
+                type: type_temp,
+                url: url_temp
+            };
+
+        });
+        setList(tempList)
     }, [tokens])
+
+    // mapping update
+    useEffect(() => {
+        console.log(mappingResults)
+    }, [mappingResults])
 
     return (
         // Stage - is a div wrapper
@@ -150,7 +233,7 @@ function KonvaLayer() {
                             <TextWithGroup
                                 x={leftIndex.x * window.innerWidth + (rightIndex.x * window.innerWidth - leftIndex.x * window.innerWidth) / 2}
                                 y={leftIndex.y * window.innerHeight + (rightIndex.y * window.innerHeight - leftIndex.y * window.innerHeight) / 2}
-                                timeout={600000}
+                                timeout={6000}
                                 following={false}
                                 text={Math.floor(dist(leftIndex.x * window.innerWidth, leftIndex.y * window.innerHeight, rightIndex.x * window.innerWidth, rightIndex.y * window.innerHeight))}/>
 
@@ -167,38 +250,153 @@ function KonvaLayer() {
                 {/*                y={300}*/}
                 {/*/>*/}
                 {/*<Group x={300} y={500}>*/}
-                {/*    <TextWithGroup timeout={600000} following={false} text={'this is a title text'}/>*/}
+                {/*    <TextWithGroup timeout={time} following={false} text={'this is a title text'}/>*/}
                 {/*</Group>*/}
                 {/*<ImageWithGroup x={500} y={500} timeout={300000} following={false} url={'./images/sony.png'}/>*/}
+                {/*<VideoWithGroup x={500} y={500} timeout={300000} following={false} opacity={1}*/}
+                {/*                src={"https://firebasestorage.googleapis.com/v0/b/metar-e5f0d.appspot.com/o/video_demo.mp4?alt=media&token=09cf6f04-2370-49b4-8c43-a75561c69962"}/>*/}
 
 
                 {
                     // Live Typography
-                    tokens.map((ele, index) => {
-                        if ((leftPointing && !rightPointing) || (rightPointing && !leftPointing) || (leftPointingTwo && !rightPointingTwo) || (rightPointingTwo && !leftPointingTwo)) {
-                            // console.log("pointing position")
-                            let actualX = ((leftPointing || leftPointingTwo) ? leftIndex.x : rightIndex.x) * window.innerWidth;
-                            let actualY = ((leftPointing || leftPointingTwo) ? leftIndex.y : rightIndex.y) * window.innerHeight;
-                            let indexY = actualY - ((80 * (index % ((window.innerHeight - actualY) / 200))));
-                            return (<TextWithGroup key={index}
-                                                   x={actualX}
-                                                   y={indexY}
-                                                   timeout={3000}
-                                                   following={false}
-                                // disable the following typography text
-                                // timeout={(leftPointing || rightPointing) ? 3000 : 60000}
-                                // following={(!(leftPointing || rightPointing))}
-                                                   text={ele.text}/>);
+                    list.map((ele, index) => {
+                        let actualX = 0;
+                        let actualY = 0;
+                        let temp_timeout = 4000;
+                        let temp_following = false;
+                        let imageSearch = false;
+
+                        if (objectMode) {
+                            actualX = objectPosX;
+                            let indexY = objectPosY;
+                            actualY = indexY - ((80 * (index % ((window.innerHeight - indexY) / 200))));
+                            temp_following = true;
                         } else {
-                            // console.log("random position")
-                            let actualX = getRandomNumber(0.2, 0.8) * window.innerWidth;
-                            let actualY = getRandomNumber(0.4, 0.7) * window.innerHeight;
-                            return (<TextWithGroup key={index}
+                            if ((leftPointing && !rightPointing) || (rightPointing && !leftPointing) || (leftPointingTwo && !rightPointingTwo) || (rightPointingTwo && !leftPointingTwo)) {
+                                // console.log("pointing position")
+                                actualX = ((leftPointing || leftPointingTwo) ? leftIndex.x : rightIndex.x) * window.innerWidth;
+                                let indexY = ((leftPointing || leftPointingTwo) ? leftIndex.y : rightIndex.y) * window.innerHeight;
+                                actualY = indexY - ((80 * (index % ((window.innerHeight - indexY) / 200))));
+                                temp_timeout = (leftPointingTwo || rightPointingTwo) ? 30000 : 4000;
+                                imageSearch = !!(leftPointingTwo || rightPointingTwo);
+
+                                // return (<TextWithGroup key={index}
+                                //                        x={actualX}
+                                //                        y={indexY}
+                                //                        timeout={ele.timeout}
+                                //     // timeout={timeoutList.current[ele.index]}
+                                //                        following={false}
+                                //     // disable the following typography text
+                                //     // timeout={(leftPointing || rightPointing) ? 3000 : 60000}
+                                //     // following={(!(leftPointing || rightPointing))}
+                                //                        text={ele.text}/>);
+                            } else {
+                                // console.log("random position")
+                                actualX = getRandomNumber(0.2, 0.8) * window.innerWidth;
+                                actualY = getRandomNumber(0.4, 0.7) * window.innerHeight;
+                                // return (<TextWithGroup key={index}
+                                //                        x={actualX}
+                                //                        y={actualY}
+                                //                        timeout={ele.timeout}
+                                //     // timeout={timeoutList.current[ele.index]}
+                                //                        following={false}
+                                //                        text={ele.text}/>);
+                            }
+                        }
+
+
+                        if (ele.type === 'image') {
+                            return <>
+                                <TextWithGroup
+                                    // key={ele.index + '-text-' + ele.text}
+                                    x={actualX}
+                                    y={actualY}
+                                    timeout={ele.timeout}
+                                    following={false}
+                                    text={ele.text}
+                                />
+                                <ImageWithGroup
+                                    // key={ele.index + '-image-' + ele.text}
+                                    x={actualX}
+                                    y={actualY}
+                                    timeout={ele.timeout}
+                                    following={false}
+                                    url={ele.url}
+                                />
+                            </>;
+
+                        } else if (ele.type === 'video') {
+                            return <>
+                                <TextWithGroup
+                                    // key={ele.index + '-text-' + ele.text}
+                                    x={actualX}
+                                    y={actualY}
+                                    timeout={ele.timeout}
+                                    following={false}
+                                    text={ele.text}
+
+                                />
+                                <VideoWithGroup
+                                    // key={ele.index + '-video-' + ele.text}
+                                    x={actualX}
+                                    y={actualY}
+                                    timeout={ele.timeout}
+                                    following={false}
+                                    opacity={1}
+                                    url={ele.url}
+                                />
+                            </>;
+                        } else if (ele.type === 'embed') {
+                            return <>
+                                <EmbedWithGroup
+                                    x={actualX}
+                                    y={actualY}
+                                    timeout={ele.timeout}
+                                    following={false}
+                                    url={ele.url}
+                                    text={ele.text}
+                                    width={300}
+                                    height={300}
+                                />
+                            </>;
+                        } else {
+
+                            return (<TextWithGroup key={ele.index + '-text-' + ele.text}
                                                    x={actualX}
                                                    y={actualY}
-                                                   timeout={3000}
-                                                   following={false}
+                                                   timeout={temp_timeout}
+                                                   following={temp_following}
                                                    text={ele.text}/>);
+
+                            // if (imageSearch) {
+                            //     socket.emit('search', ele.text)
+                            //     return <>
+                            //         <TextWithGroup
+                            //             // key={ele.index + '-text-' + ele.text}
+                            //             x={actualX}
+                            //             y={actualY}
+                            //             timeout={ele.timeout}
+                            //             following={false}
+                            //             text={ele.text}
+                            //         />
+                            //         <ImageWithGroup
+                            //             // key={ele.index + '-image-' + ele.text}
+                            //             x={actualX}
+                            //             y={actualY}
+                            //             timeout={ele.timeout}
+                            //             following={false}
+                            //             url={ele.url}
+                            //         />
+                            //     </>;
+                            // } else {
+                            //     return (<TextWithGroup key={ele.index + '-text-' + ele.text}
+                            //                            x={actualX}
+                            //                            y={actualY}
+                            //                            timeout={temp_timeout}
+                            //                            following={temp_following}
+                            //                            text={ele.text}/>);
+                            // }
+
                         }
 
                     })

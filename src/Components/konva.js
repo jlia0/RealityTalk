@@ -19,7 +19,8 @@ import {EmbedWithGroup, ImageWithGroup, TextWithGroup, VideoWithGroup} from "./v
 import {selectResults} from "../app/mappingReducer";
 import {withGroup} from "./KonvaElements/groupwrapper";
 import {selectObjectMode, selectObjectPosX, selectObjectPosY, setObjectMode} from "../app/colorReducer";
-// import {socket} from "./speech";
+import {socket} from "./speech";
+
 
 
 function KonvaLayer() {
@@ -151,7 +152,7 @@ function KonvaLayer() {
                         const fileType = get_url_extension(mapping[1]);
                         if (fileType === 'jpg' || fileType === 'png') {
                             type_temp = 'image';
-                            timeout_temp = 300000;
+                            timeout_temp = 10000;
                             url_temp = mapping[1];
                             return false;
                         } else if (fileType === 'mp4') {
@@ -161,13 +162,13 @@ function KonvaLayer() {
                             return false;
                         } else {
                             type_temp = 'embed';
-                            timeout_temp = 600000;
+                            timeout_temp = 15000;
                             url_temp = mapping[1];
                             return false;
                         }
                     } else {
                         switch (mapping[1]) {
-                            case 'object mode start':
+                            case 'object':
                                 if (!interimTranscript.includes(mapping[0])) {
                                     console.log('physical object mode start');
                                     dispatch(setObjectMode(true));
@@ -242,21 +243,6 @@ function KonvaLayer() {
                         : <></>
                 }
 
-                {/*<EmbeddedScreen url={"https://www.youtube.com/embed/xDMP3i36naA"}*/}
-                {/*                text={"Embedded Screen"}*/}
-                {/*                width={300}*/}
-                {/*                height={300}*/}
-                {/*                x={300}*/}
-                {/*                y={300}*/}
-                {/*/>*/}
-                {/*<Group x={300} y={500}>*/}
-                {/*    <TextWithGroup timeout={time} following={false} text={'this is a title text'}/>*/}
-                {/*</Group>*/}
-                {/*<ImageWithGroup x={500} y={500} timeout={300000} following={false} url={'./images/sony.png'}/>*/}
-                {/*<VideoWithGroup x={500} y={500} timeout={300000} following={false} opacity={1}*/}
-                {/*                src={"https://firebasestorage.googleapis.com/v0/b/metar-e5f0d.appspot.com/o/video_demo.mp4?alt=media&token=09cf6f04-2370-49b4-8c43-a75561c69962"}/>*/}
-
-
                 {
                     // Live Typography
                     list.map((ele, index) => {
@@ -280,41 +266,30 @@ function KonvaLayer() {
                                 temp_timeout = (leftPointingTwo || rightPointingTwo) ? 30000 : 4000;
                                 imageSearch = !!(leftPointingTwo || rightPointingTwo);
 
-                                // return (<TextWithGroup key={index}
-                                //                        x={actualX}
-                                //                        y={indexY}
-                                //                        timeout={ele.timeout}
-                                //     // timeout={timeoutList.current[ele.index]}
-                                //                        following={false}
-                                //     // disable the following typography text
-                                //     // timeout={(leftPointing || rightPointing) ? 3000 : 60000}
-                                //     // following={(!(leftPointing || rightPointing))}
-                                //                        text={ele.text}/>);
                             } else {
-                                // console.log("random position")
-                                actualX = getRandomNumber(0.2, 0.8) * window.innerWidth;
-                                actualY = getRandomNumber(0.4, 0.7) * window.innerHeight;
-                                // return (<TextWithGroup key={index}
-                                //                        x={actualX}
-                                //                        y={actualY}
-                                //                        timeout={ele.timeout}
-                                //     // timeout={timeoutList.current[ele.index]}
-                                //                        following={false}
-                                //                        text={ele.text}/>);
+                                if (Math.random() < 0.5) {
+                                    actualX = 0.06 * window.innerWidth;
+                                } else {
+                                    actualX = 0.7 * window.innerWidth;
+                                }
+                                actualY = (window.innerHeight / 4) + (80 * (index % ((window.innerHeight) / 150)));
                             }
                         }
 
 
+                        // render
+
+
                         if (ele.type === 'image') {
                             return <>
-                                <TextWithGroup
-                                    // key={ele.index + '-text-' + ele.text}
-                                    x={actualX}
-                                    y={actualY}
-                                    timeout={ele.timeout}
-                                    following={false}
-                                    text={ele.text}
-                                />
+                                {/*<TextWithGroup*/}
+                                {/*    // key={ele.index + '-text-' + ele.text}*/}
+                                {/*    x={actualX}*/}
+                                {/*    y={actualY}*/}
+                                {/*    timeout={ele.timeout}*/}
+                                {/*    following={false}*/}
+                                {/*    text={ele.text}*/}
+                                {/*/>*/}
                                 <ImageWithGroup
                                     // key={ele.index + '-image-' + ele.text}
                                     x={actualX}
@@ -361,7 +336,7 @@ function KonvaLayer() {
                             </>;
                         } else {
 
-                            return (<TextWithGroup key={ele.index + '-text-' + ele.text}
+                            return (<TextWithGroup key={ele.index}
                                                    x={actualX}
                                                    y={actualY}
                                                    timeout={temp_timeout}
@@ -369,6 +344,7 @@ function KonvaLayer() {
                                                    text={ele.text}/>);
 
                             // if (imageSearch) {
+                            //     console.log("image search")
                             //     socket.emit('search', ele.text)
                             //     return <>
                             //         <TextWithGroup

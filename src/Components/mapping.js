@@ -7,12 +7,11 @@ export function ReadMapping() {
     const {readString} = usePapaParse();
     const dispatch = useDispatch();
 
-    const csvString = `university of calgary\thttps://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fimages.all-free-download.com%2Fimages%2Fgraphiclarge%2Funiversity_of_calgary_87471.jpg
-recording\thttps://firebasestorage.googleapis.com/v0/b/metar-e5f0d.appspot.com/o/1554414349614495.mp4?alt=media&token=d6399112-c747-42f5-9ac2-eaa0bad52c16
-demo\thttps://firebasestorage.googleapis.com/v0/b/metar-e5f0d.appspot.com/o/video_demo.mp4?alt=media&token=09cf6f04-2370-49b4-8c43-a75561c69962
-embedded\thttps://www.youtube.com/embed/xDMP3i36naA
-bottle\tobject mode start
-presentation\tobject mode end`
+    let csvString = ``
+
+    csvString = csvString.replace('youtu.be/', 'www.youtube.com/embed/')
+    // csvString = csvString + `
+    // bottle\tobject mode start`
 
 
     useEffect(() => {

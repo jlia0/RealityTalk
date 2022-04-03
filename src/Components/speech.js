@@ -3,7 +3,7 @@ import {setInterimTranscript, setFinalTranscript, setTokens} from "../app/speech
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 
-const socket = io('http://localhost:4000/');
+export const socket = io('http://localhost:4000/');
 // Speech Recognition
 const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition
 const recognition = new SpeechRecognition()
@@ -23,18 +23,19 @@ function Speech() {
                 return (token.keyword_rank > 0 || token.ent_type !== '')
             })
 
-            console.log(json.tokens)
+            // console.log(json.tokens)
 
             dispatch(setTokens(json.tokens))
         })
 
         // image search
-        // socket.on('search', function (json) {
-        //     console.log(json)
-        //     if (json.noResults) return false
-        //     let description = json.results[0].description
-        //     console.log(description)
-        // })
+        socket.on('search', function (json) {
+            console.log(json)
+
+            // if (json.noResults) return false
+            // let description = json.results[0].description
+            // console.log(description)
+        })
 
         // Speech
         recognition.lang = 'en-US'

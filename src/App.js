@@ -27,14 +27,16 @@ function App() {
             <>
                 <Speech/>
                 <ReadMapping/>
+                {/*<ColorTracking/>*/}
                 {isObjectMode === true ? <ColorTracking/> : null}
                 {/*<TestSpeech/>*/}
                 <HandsRecognition/>
                 <KonvaLayer/>
             </>
-
         </div>
     );
+
+
 }
 
 

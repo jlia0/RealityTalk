@@ -10,7 +10,7 @@ const DDG = require('duck-duck-scrape')
 
 app.use(cors()); // add this line
 
-const io = socketio(server,{
+const io = socketio(server, {
     cors: {
         origin: '*',
         methods: ['GET', 'POST']
@@ -34,11 +34,12 @@ io.on('connection', (socket) => {
 
     socket.on('search', (keyword) => {
         keyword = keyword.replace(' ', '+')
+        console.log(keyword)
         const searchResults = DDG.search(keyword, {
             safeSearch: DDG.SafeSearchType.STRICT
-        }).then(function(res) {
-            console.log(res)
-            socket.emit('search', res)
+        }).then(function (res) {
+            console.log(res[0])
+            socket.emit('search', res[0])
         })
     })
 

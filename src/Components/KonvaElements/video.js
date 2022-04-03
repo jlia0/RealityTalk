@@ -52,22 +52,22 @@ export const Video = (props) => {
             }
         }
 
-        // if (duration !== 0){
-        //     setTimeout(() => {
-        //         if (imageRef.current !== null) {
-        //             imageRef.current.to({
-        //                 scaleX: 0,
-        //                 scaleY: 0,
-        //                 opacity: 0,
-        //                 easing: Konva.Easings.BackEaseInOut,
-        //                 duration: 0.4
-        //             })
-        //             setTimeout(() => {
-        //                 imageRef.current.destroy();
-        //             }, 400)
-        //         }
-        //     }, duration * 1000 + 1000);
-        // }
+        if (duration !== 0){
+            setTimeout(() => {
+                if (imageRef.current !== null) {
+                    imageRef.current.to({
+                        scaleX: 0,
+                        scaleY: 0,
+                        opacity: 0,
+                        easing: Konva.Easings.BackEaseInOut,
+                        duration: 0.4
+                    })
+                    setTimeout(() => {
+                        imageRef.current.destroy();
+                    }, 400)
+                }
+            }, duration * 1000 + 1000);
+        }
     }, [duration])
 
     // use Konva.Animation to redraw a layer

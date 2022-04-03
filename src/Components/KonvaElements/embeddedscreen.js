@@ -19,6 +19,7 @@ export const EmbeddedScreen = (props) => {
                         width={props.width}
                         height={props.height}
                         display="initial"
+                        allow={'autoplay'}
                 />
             </Html>
             <Label x={(props.width / 2) - (x / 2)} y={-60}>

@@ -17,7 +17,7 @@ export const LayerImage = (props) => {
             // const height = imageRef.current.attrs.image.height;
             const width = imageRef.current.attrs.image.width;
             // const scaleHeight = 0.15 * window.innerHeight;
-            const scaleWidth = 0.15 * window.innerWidth;
+            const scaleWidth = 0.20 * window.innerWidth;
             setScaleX(scaleWidth / width);
             // setScaleY(scaleHeight / height);
         }
@@ -27,8 +27,8 @@ export const LayerImage = (props) => {
     //     setScaleX()
     // }, [scaleProps])
 
-    return <Image ref={imageRef} image={image}
-                  // x={props.x} y={props.y}
+    return <Image ref={imageRef} image={image} opacity={props.opacity}
+                  x={props.x} y={props.y}
                   scale={{x: scaleX, y: scaleX}}
     />;
 };

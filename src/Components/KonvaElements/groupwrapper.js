@@ -8,7 +8,7 @@ export function withGroup(Wrapped) {
         const groupRef = useRef(null)
         const [xp, setXp] = useState(0)
         const [yp, setYp] = useState(0)
-        const {x, y, timeout, following, opacity, ...passThroughProps} = props;
+        const {x, y, timeout, following, opacity, scaleX, scaleY, ...passThroughProps} = props;
         // const initialTimeout = useRef(timeout);
         // const timer = useRef(null)
 
@@ -33,7 +33,11 @@ export function withGroup(Wrapped) {
                         easing: Konva.Easings.BackEaseInOut,
                         duration: 0.4
                     })
-                    setTimeout(() => groupRef.current.destroy(), 400)
+                    setTimeout(() => {
+                        // groupRef.current.x(9999)
+                        // groupRef.current.y(9999)
+                        groupRef.current.destroy()
+                    }, 400)
                 }
             }, timeout);
 
@@ -83,6 +87,7 @@ export function withGroup(Wrapped) {
             <Group
                 ref={groupRef}
                 draggable={true} opacity={0}
+                scaleX={scaleX} scaleY={scaleY}
                 // scale={groupRef.current === null ? {x: 0, y: 0} : {x: 1, y: 1}}
                 x={following ? x : xp} y={following ? y : yp}
             >

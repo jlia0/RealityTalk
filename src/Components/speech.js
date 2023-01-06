@@ -103,7 +103,8 @@ function TestSpeech() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let defaultTranscript = "Hi, my name is Adnan Karim. I am a graduate student at the University of Calgary in the Department of Computer Science. Today, I want to talk about Real-time Augmented Presentation demo. As you can see when I talk about something, we can augment presentation using an augmented reality interface. We have several features, such as live kinetic typography, embedded icons, embedded visuals, as well as an embedded annotation to a physical object. All components are interactive with gestural interactions. And most importantly all animations happen in real-time. This means that no video editing or programming is required. Thus it can significantly reduce the time and efforts of making such an augmented presentation, but also expands the tremendous potential for real-time live presentations like classroom lectures. We believe these techniques can make the presentation more expressive and engaging. In this talk, I want to describe how we designed such a system and introduce a new system to describe how we implemented this demo. And here's the object mode."
+        let defaultTranscript = `Hello everyone, my name is Jian Liao, and I am super excited to join the T04 cohort in October. A little bit background about myself, I recently graduated from the University of Calgary as a computer science undergrad. In the meantime, I am a three-time founder of different businesses from IoT devices to small business SAAS tool, two of them in Hong Kong and one in Calgary. I also worked as a data engineer`
+
         defaultTranscript = defaultTranscript.replaceAll('.', '')
         defaultTranscript = defaultTranscript.replaceAll(',', '')
 
@@ -128,6 +129,7 @@ function TestSpeech() {
         socket.on('message', (data) => {
             let json = JSON.parse(data)
             let i = 1
+
             setInterval(() => {
                 let current = Object.assign({}, json)
                 current.tokens = current.tokens.slice(0, i)
@@ -139,8 +141,26 @@ function TestSpeech() {
                 dispatch(setTokens(current.tokens))
                 // window.App.setState({ tokens: current.tokens })
                 i++
-            }, 400)
+            }, 650)
         })
+
+        // socket.on('message', (data) => {
+        //     let json = JSON.parse(data)
+        //     let i = 1
+        //
+        //     // let jtokens = json.tokens;
+        //     json.tokens = json.tokens.filter((token) => {
+        //         return (token.keyword_rank > 0 || token.ent_type !== '')
+        //     });
+        //
+        //     setInterval(() => {
+        //         let current = json.tokens.slice(0, i)
+        //         // console.log(current.tokens)
+        //         dispatch(setTokens(current))
+        //         // window.App.setState({ tokens: current.tokens })
+        //         i++
+        //     }, 1800)
+        // })
     }, [])
 
     return (

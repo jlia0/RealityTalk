@@ -12,15 +12,15 @@ import {useEffect, useRef, useState} from "react";
 
 function App() {
     const objectMode = useSelector(selectObjectMode)
-    const [isObjectMode, setObjectMode] = useState(false);
+    // const [isObjectMode, setObjectMode] = useState(false);
 
-    useEffect(() => {
-        if (objectMode) {
-            setObjectMode(true);
-        } else {
-            setObjectMode(false);
-        }
-    }, [objectMode])
+    // useEffect(() => {
+    //     if (objectMode) {
+    //         setObjectMode(true);
+    //     } else {
+    //         setObjectMode(false);
+    //     }
+    // }, [objectMode])
 
     return (
         <div className="App">
@@ -28,7 +28,7 @@ function App() {
                 <Speech/>
                 <ReadMapping/>
                 {/*<ColorTracking/>*/}
-                {isObjectMode === true ? <ColorTracking/> : null}
+                {/*{isObjectMode === true ? <ColorTracking/> : null}*/}
                 {/*<TestSpeech/>*/}
                 <HandsRecognition/>
                 <KonvaLayer/>

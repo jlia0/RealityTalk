@@ -26,7 +26,7 @@ export const Video = (props) => {
                 width: videoElement.videoWidth,
                 height: videoElement.videoHeight
             });
-            const scaleWidth = 0.15 * window.innerWidth;
+            const scaleWidth = 0.25 * window.innerWidth;
             setScaleX(scaleWidth / videoElement.videoWidth);
             setDuration(videoElement.duration);
         };

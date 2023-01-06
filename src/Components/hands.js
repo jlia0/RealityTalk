@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import * as draw from "@mediapipe/drawing_utils";
 import * as HandsMediaPipe from "@mediapipe/hands";
 import {Camera} from "@mediapipe/camera_utils";
@@ -23,13 +23,15 @@ import {dist, throttle} from "./helper";
 function HandsRecognition() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
-    const showLandmarks = useRef(true);
-    const objectMode = useSelector(selectObjectMode);
+    // const showLandmarks = useRef(true);
+    // const objectMode = useSelector(selectObjectMode);
     const dispatch = useDispatch();
+    const [device_id, setDeviceId] = useState({});
 
-    useEffect(() => {
-        showLandmarks.current = !objectMode;
-    }, [objectMode])
+
+    // useEffect(() => {
+    //     showLandmarks.current = !objectMode;
+    // }, [objectMode])
 
 
     const checkLandmarks = (landmarks, isRightHand) => {
@@ -117,7 +119,6 @@ function HandsRecognition() {
         canvasCtx.save();
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-        // canvasCtx.drawImage(
         //     results.image, 0, 0, canvasElement.width, canvasElement.height);
 
         // check how many hands
@@ -134,18 +135,18 @@ function HandsRecognition() {
                     checkLandmarks(landmarks, isRightHand)
                 }, 0)
 
-                if (showLandmarks.current) {
-                    draw.drawConnectors(canvasCtx, landmarks, HandsMediaPipe.HAND_CONNECTIONS,
-                        {color: isRightHand ? '#00FF00' : '#FF0000'});
-
-                    draw.drawLandmarks(canvasCtx, landmarks, {
-                        color: isRightHand ? '#00FF00' : '#FF0000',
-                        fillColor: isRightHand ? '#FF0000' : '#00FF00',
-                        radius: (data) => {
-                            return draw.lerp(data.from.z, -0.15, .1, 10, 1);
-                        }
-                    });
-                }
+                // if (showLandmarks.current) {
+                // draw.drawConnectors(canvasCtx, landmarks, HandsMediaPipe.HAND_CONNECTIONS,
+                //     {color: isRightHand ? '#00FF00' : '#FF0000'});
+                //
+                // draw.drawLandmarks(canvasCtx, landmarks, {
+                //     color: isRightHand ? '#00FF00' : '#FF0000',
+                //     fillColor: isRightHand ? '#FF0000' : '#00FF00',
+                //     radius: (data) => {
+                //         return draw.lerp(data.from.z, -0.15, .1, 10, 1);
+                //     }
+                // });
+                // }
 
             }
         }
@@ -168,29 +169,59 @@ function HandsRecognition() {
         });
         hands.onResults(onResults);
 
+        // if (videoRef.current !== null) {
         // Camera
         const camera = new Camera(videoRef.current.video, {
             onFrame: async () => {
+                // console.log(videoRef.current.video)
                 await hands.send({image: videoRef.current.video});
             },
             width: window.innerWidth,
             height: window.innerHeight
         });
+
+        // console.log(device_id)
+
         camera.start().then(r => {
             dispatch(setCamera("#webcam"))
         });
+        // }
+
 
     }, [videoRef])
+
+
+    useEffect(() => {
+
+        // navigator.mediaDevices.enumerateDevices().then((device) => {
+        //     device.forEach((dev) => {
+        //         if (dev.kind === "videoinput" && dev.label === "FaceTime HD Camera") {
+        //             setDeviceId(dev.deviceId)
+        //         }
+        //     })
+        // });
+
+    }, [])
 
 
     return (
 
         <div className={"VideoLayer"}>
-            <Webcam id={"webcam"} className={"abs_cam"} ref={videoRef} mirrored={true}
-                    videoConstraints={{width: window.innerWidth, height: window.innerHeight}}/>
+
+            {device_id && <Webcam id={"webcam"} className={"abs_cam"} ref={videoRef} mirrored={true}
+                                  width={window.innerWidth} height={window.innerHeight}
+                                  videoConstraints={{
+                                      width: window.innerWidth,
+                                      height: window.innerHeight,
+                                      // deviceId: device_id
+                                  }}
+
+            />}
+
             <canvas className={"abs_canvas"} ref={canvasRef} width={window.innerWidth} height={window.innerHeight}/>
         </div>
     );
 }
+
 
 export default HandsRecognition;

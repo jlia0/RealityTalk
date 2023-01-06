@@ -1,3 +1,6 @@
+import React from "react";
+import Webcam from "react-webcam";
+
 export const dist = (x1, y1, x2, y2) => Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
 
 export const calc_angle = (x1, y1, x2, y2) => {
@@ -22,8 +25,18 @@ export const throttle = (fn, ms) => {
 }
 
 export const findGroup = (node) => {
-    let group = node.findAncestors("Group");
-    return group[group.length - 1];
+    let groups = node.findAncestors("Group");
+    let group_found;
+    groups.forEach((group, index) => {
+        let nodeTypeName = Object.getPrototypeOf(group).nodeType;
+        if (nodeTypeName === 'Group' && (index === groups.length - 1)) {
+            if (group_found === undefined) {
+                group_found = group;
+            }
+        }
+    });
+
+    return group_found;
 }
 
 export const findLabel = (node) => {
@@ -104,4 +117,34 @@ export const createRingBuffer = function (length) {
             }
         }
     };
+};
+
+export const WebcamCapture = () => {
+    const [deviceId, setDeviceId] = React.useState({});
+    const [devices, setDevices] = React.useState([]);
+
+    const handleDevices = React.useCallback(
+        mediaDevices =>
+            setDevices(mediaDevices.filter(({kind}) => kind === "videoinput")),
+        [setDevices]
+    );
+
+    React.useEffect(
+        () => {
+            navigator.mediaDevices.enumerateDevices().then(handleDevices);
+        },
+        [handleDevices]
+    );
+
+    return (
+        <>
+            {devices.map((device, key) => (
+                <div>
+                    <Webcam audio={false} videoConstraints={{deviceId: device.deviceId}}/>
+                    {device.label || `Device ${key + 1}`}
+                </div>
+
+            ))}
+        </>
+    );
 };

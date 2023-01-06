@@ -7,7 +7,7 @@ export function Textual(props) {
             <Tag fill={'#62A6BF'}/>
             <Text text={props.text}
                   fontFamily={'Helvetica'}
-                  fontSize={35}
+                  fontSize={30}
                   padding={20}
                   fill={'white'}
                   align={'center'}

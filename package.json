@@ -2,7 +2,6 @@
   "name": "augmented_presentation",
   "version": "0.1.0",
   "private": true,
-  "main": "main.js",
   "homepage": "./",
   "dependencies": {
     "@mediapipe/camera_utils": "^0.3.1640029074",
@@ -16,7 +15,6 @@
     "@testing-library/user-event": "^13.5.0",
     "cors": "^2.8.5",
     "duck-duck-scrape": "^2.2.1",
-    "electron": "^20.1.3",
     "express": "^4.17.3",
     "html2canvas": "^1.4.1",
     "konva": "^8.3.10",
@@ -49,10 +47,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-start": "electron .",
-    "devtest": "concurrently -k \"npm run start\" \"npm run electron\"",
-    "electron": "wait-on tcp:3000 && electron .",
-    "dev": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\""
+    "spacy-install": "python3 -m pip install -U pip setuptools wheel && python3 -m pip install -U spacy && python3 -m spacy download en_core_web_sm && python3 -m pip install pytextrank"
   },
   "eslintConfig": {
     "extends": [

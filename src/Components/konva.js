@@ -121,7 +121,7 @@ function KonvaLayer() {
     // Gesture Interactions
 
     useEffect(() => {
-        try {
+        // try {
             if (multiHand === 2 && leftPinch && rightPinch) {
                 // scaling mode
                 const actualXL = leftIndex.x * window.innerWidth;
@@ -216,24 +216,23 @@ function KonvaLayer() {
                     dispatch(setRightPinch(false))
                 }
             }
-        } catch (e) {
-            console.log(e)
-        }
+        // } catch (e) {
+        //     console.log(e)
+        // }
 
 
     }, [leftPinch, rightPinch, leftIndex, rightIndex])
 
-    let flag = false;
+    // let flag = false;
 
     // tokens update
     useEffect(() => {
-        // console.log(tokens)
+        console.log(tokens)
         const tempList = tokens.map((ele, index) => {
             let type_temp = 'text';
             let url_temp = '';
             let timeout_temp = 3000;
             let text_temp = ele.text;
-
 
             //
             // if (text_temp === 'GN' || text_temp === 'Jen') {

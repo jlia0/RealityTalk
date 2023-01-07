@@ -24,11 +24,13 @@ server.listen(4000, () => {
 
 io.on('connection', (socket) => {
     console.log('connection start')
+
     socket.on('message', (message) => {
         pyshell.send(message)
     })
 
     pyshell.on('message', (message) => {
+        // console.log(message)
         socket.emit('message', message)
     })
 

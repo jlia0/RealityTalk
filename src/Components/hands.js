@@ -136,16 +136,16 @@ function HandsRecognition() {
                 }, 0)
 
                 // if (showLandmarks.current) {
-                // draw.drawConnectors(canvasCtx, landmarks, HandsMediaPipe.HAND_CONNECTIONS,
-                //     {color: isRightHand ? '#00FF00' : '#FF0000'});
-                //
-                // draw.drawLandmarks(canvasCtx, landmarks, {
-                //     color: isRightHand ? '#00FF00' : '#FF0000',
-                //     fillColor: isRightHand ? '#FF0000' : '#00FF00',
-                //     radius: (data) => {
-                //         return draw.lerp(data.from.z, -0.15, .1, 10, 1);
-                //     }
-                // });
+                draw.drawConnectors(canvasCtx, landmarks, HandsMediaPipe.HAND_CONNECTIONS,
+                    {color: isRightHand ? '#00FF00' : '#FF0000'});
+
+                draw.drawLandmarks(canvasCtx, landmarks, {
+                    color: isRightHand ? '#00FF00' : '#FF0000',
+                    fillColor: isRightHand ? '#FF0000' : '#00FF00',
+                    radius: (data) => {
+                        return draw.lerp(data.from.z, -0.15, .1, 10, 1);
+                    }
+                });
                 // }
 
             }
@@ -191,32 +191,32 @@ function HandsRecognition() {
     }, [videoRef])
 
 
-    useEffect(() => {
-
-        // navigator.mediaDevices.enumerateDevices().then((device) => {
-        //     device.forEach((dev) => {
-        //         if (dev.kind === "videoinput" && dev.label === "FaceTime HD Camera") {
-        //             setDeviceId(dev.deviceId)
-        //         }
-        //     })
-        // });
-
-    }, [])
+    // useEffect(() => {
+    //
+    //     // navigator.mediaDevices.enumerateDevices().then((device) => {
+    //     //     device.forEach((dev) => {
+    //     //         if (dev.kind === "videoinput" && dev.label === "FaceTime HD Camera") {
+    //     //             setDeviceId(dev.deviceId)
+    //     //         }
+    //     //     })
+    //     // });
+    //
+    // }, [])
 
 
     return (
 
         <div className={"VideoLayer"}>
 
-            {device_id && <Webcam id={"webcam"} className={"abs_cam"} ref={videoRef} mirrored={true}
-                                  width={window.innerWidth} height={window.innerHeight}
-                                  videoConstraints={{
-                                      width: window.innerWidth,
-                                      height: window.innerHeight,
-                                      // deviceId: device_id
-                                  }}
+            <Webcam id={"webcam"} className={"abs_cam"} ref={videoRef} mirrored={true}
+                    width={window.innerWidth} height={window.innerHeight}
+                    videoConstraints={{
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        // deviceId: device_id
+                    }}
 
-            />}
+            />
 
             <canvas className={"abs_canvas"} ref={canvasRef} width={window.innerWidth} height={window.innerHeight}/>
         </div>

@@ -10,6 +10,8 @@ const recognition = new SpeechRecognition()
 
 let finalTranscript = '';
 
+console.log(recognition)
+
 function Speech() {
     const dispatch = useDispatch();
 
@@ -18,12 +20,13 @@ function Speech() {
         socket.on('message', (data) => {
             let json = JSON.parse(data)
 
+            // console.log(json)
+
             // filter
             json.tokens = json.tokens.filter((token) => {
                 return (token.keyword_rank > 0 || token.ent_type !== '')
             })
 
-            // console.log(json.tokens)
 
             dispatch(setTokens(json.tokens))
         })
@@ -65,6 +68,8 @@ function Speech() {
             let text = finalTranscript + interimTranscript;
             // text = interimTranscript;
             text = text.replace(/(\r\n|\n|\r)/gm, ' ')
+
+            // console.log(text)
 
             dispatch(setFinalTranscript(text))
             dispatch(setInterimTranscript(interimTranscript))
@@ -109,7 +114,7 @@ function TestSpeech() {
         defaultTranscript = defaultTranscript.replaceAll(',', '')
 
         let speechTest = true
-        speechTest = false
+        // speechTest = false
 
         if (speechTest) {
             let words = defaultTranscript.split(' ')

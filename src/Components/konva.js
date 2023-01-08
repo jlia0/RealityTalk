@@ -122,100 +122,100 @@ function KonvaLayer() {
 
     useEffect(() => {
         // try {
-            if (multiHand === 2 && leftPinch && rightPinch) {
-                // scaling mode
-                const actualXL = leftIndex.x * window.innerWidth;
-                const actualYL = leftIndex.y * window.innerHeight;
-                let nodeL = stageRef.current.getIntersection({
-                    x: actualXL,
-                    y: actualYL
-                });
+        if (multiHand === 2 && leftPinch && rightPinch) {
+            // scaling mode
+            const actualXL = leftIndex.x * window.innerWidth;
+            const actualYL = leftIndex.y * window.innerHeight;
+            let nodeL = stageRef.current.getIntersection({
+                x: actualXL,
+                y: actualYL
+            });
 
-                const actualXR = rightIndex.x * window.innerWidth;
-                const actualYR = rightIndex.y * window.innerHeight;
+            const actualXR = rightIndex.x * window.innerWidth;
+            const actualYR = rightIndex.y * window.innerHeight;
 
-                let nodeR = stageRef.current.getIntersection({
-                    x: actualXR,
-                    y: actualYR
-                });
+            let nodeR = stageRef.current.getIntersection({
+                x: actualXR,
+                y: actualYR
+            });
 
-                if (nodeL !== null && Object.getPrototypeOf(nodeL).className !== 'Line') {
-                    let group = findGroup(nodeL);
+            if (nodeL !== null && Object.getPrototypeOf(nodeL).className !== 'Line') {
+                let group = findGroup(nodeL);
 
-                    if (nodeL === nodeR) {
-                        // let angle = calc_angle(actualXL, actualYL, actualXR, actualYR)
-                        // group.rotation(actualYR < actualYL ? -1 * angle : angle)
-                    } else {
-                        let width = window.innerWidth / 2
-                        let distance = dist(actualXL, actualYL, actualXR, actualYR)
-                        let scale = 1 + (distance / width);
-                        group.scale({x: scale, y: scale})
-                    }
-                }
-
-            } else {
-                if (leftPinch || rightPinch) {
-                    if (stageRef.current !== null) {
-                        const actualX = (leftPinch ? leftIndex.x : rightIndex.x) * window.innerWidth;
-                        const actualY = (leftPinch ? leftIndex.y : rightIndex.y) * window.innerHeight
-
-                        // console.log(stageRef.current)
-
-                        let node = stageRef.current.getIntersection({
-                            x: actualX,
-                            y: actualY
-                        })
-
-                        if (node !== null) {
-                            let group = findGroup(node);
-
-                            if (group !== undefined) {
-                                const nodeClassName = Object.getPrototypeOf(node).className;
-
-                                // if node is Text
-                                if (nodeClassName === 'Text') {
-                                    const label = findLabel(node);
-
-                                    let labelX = 0, labelY = 0
-
-                                    if (label !== undefined) {
-                                        labelX = isNaN(label.x()) ? 0 : label.x();
-                                        labelY = isNaN(label.y()) ? 0 : label.y();
-                                    }
-
-                                    // list.forEach((ele) => {
-                                    //     if (ele.text === node.attrs.text) {
-                                    //         timeoutList.current[ele.index] = 60000;
-                                    //     }
-                                    // });
-
-                                    group.x(actualX - (node.width() * group.scaleX() / 2) - labelX * group.scaleX())
-                                    group.y(actualY - (node.height() * group.scaleY() / 2) - labelY * group.scaleY())
-
-                                    // if node is Image
-                                } else if (nodeClassName === 'Image') {
-                                    group.x(actualX - (node.width() * node.scaleX() * group.scaleX() / 2))
-                                    group.y(actualY - (node.height() * node.scaleY() * group.scaleX() / 2))
-                                }
-
-                                // if (group.rotation() !== 0) {
-                                //     let offsetX = Math.abs(Math.cos(group.rotation()) * node.width());
-                                //     let offsetY = Math.cos(group.rotation()) * node.height();
-                                //
-                                //     // console.log(offsetX, offsetY, actualX - (offsetX * group.scaleX() / 2) - textX - labelX, actualY - (offsetY * group.scaleY() / 2) - textY - labelY)
-                                //     //
-                                //     // group.x(actualX - (offsetX * group.scaleX() / 2) - textX - labelX)
-                                //     // group.y(actualY - ((node.height() + offsetY) * group.scaleY() / 2) - textY - labelY)
-                                // }
-                            }
-                        }
-
-                    }
+                if (nodeL === nodeR) {
+                    // let angle = calc_angle(actualXL, actualYL, actualXR, actualYR)
+                    // group.rotation(actualYR < actualYL ? -1 * angle : angle)
                 } else {
-                    dispatch(setLeftPinch(false))
-                    dispatch(setRightPinch(false))
+                    let width = window.innerWidth / 2
+                    let distance = dist(actualXL, actualYL, actualXR, actualYR)
+                    let scale = 1 + (distance / width);
+                    group.scale({x: scale, y: scale})
                 }
             }
+
+        } else {
+            if (leftPinch || rightPinch) {
+                if (stageRef.current !== null) {
+                    const actualX = (leftPinch ? leftIndex.x : rightIndex.x) * window.innerWidth;
+                    const actualY = (leftPinch ? leftIndex.y : rightIndex.y) * window.innerHeight
+
+                    // console.log(stageRef.current)
+
+                    let node = stageRef.current.getIntersection({
+                        x: actualX,
+                        y: actualY
+                    })
+
+                    if (node !== null) {
+                        let group = findGroup(node);
+
+                        if (group !== undefined) {
+                            const nodeClassName = Object.getPrototypeOf(node).className;
+
+                            // if node is Text
+                            if (nodeClassName === 'Text') {
+                                const label = findLabel(node);
+
+                                let labelX = 0, labelY = 0
+
+                                if (label !== undefined) {
+                                    labelX = isNaN(label.x()) ? 0 : label.x();
+                                    labelY = isNaN(label.y()) ? 0 : label.y();
+                                }
+
+                                // list.forEach((ele) => {
+                                //     if (ele.text === node.attrs.text) {
+                                //         timeoutList.current[ele.index] = 60000;
+                                //     }
+                                // });
+
+                                group.x(actualX - (node.width() * group.scaleX() / 2) - labelX * group.scaleX())
+                                group.y(actualY - (node.height() * group.scaleY() / 2) - labelY * group.scaleY())
+
+                                // if node is Image
+                            } else if (nodeClassName === 'Image') {
+                                group.x(actualX - (node.width() * node.scaleX() * group.scaleX() / 2))
+                                group.y(actualY - (node.height() * node.scaleY() * group.scaleX() / 2))
+                            }
+
+                            // if (group.rotation() !== 0) {
+                            //     let offsetX = Math.abs(Math.cos(group.rotation()) * node.width());
+                            //     let offsetY = Math.cos(group.rotation()) * node.height();
+                            //
+                            //     // console.log(offsetX, offsetY, actualX - (offsetX * group.scaleX() / 2) - textX - labelX, actualY - (offsetY * group.scaleY() / 2) - textY - labelY)
+                            //     //
+                            //     // group.x(actualX - (offsetX * group.scaleX() / 2) - textX - labelX)
+                            //     // group.y(actualY - ((node.height() + offsetY) * group.scaleY() / 2) - textY - labelY)
+                            // }
+                        }
+                    }
+
+                }
+            } else {
+                dispatch(setLeftPinch(false))
+                dispatch(setRightPinch(false))
+            }
+        }
         // } catch (e) {
         //     console.log(e)
         // }
@@ -475,29 +475,29 @@ function KonvaLayer() {
 
             <Layer>
 
-                {/*{*/}
-                {/*    // drawing the line of scaling*/}
-                {/*    multiHand === 2 && leftPinch && rightPinch ?*/}
-                {/*        <>*/}
-                {/*            <Line*/}
-                {/*                points={[leftIndex.x * window.innerWidth, leftIndex.y * window.innerHeight, rightIndex.x * window.innerWidth, rightIndex.y * window.innerHeight]}*/}
-                {/*                stroke={'red'}*/}
-                {/*                strokeWidth={8}*/}
-                {/*                lineCap={'round'}*/}
-                {/*                lineJoin={'round'}*/}
-                {/*            />*/}
+                {
+                    // drawing the line of scaling
+                    multiHand === 2 && leftPinch && rightPinch ?
+                        <>
+                            <Line
+                                points={[leftIndex.x * window.innerWidth, leftIndex.y * window.innerHeight, rightIndex.x * window.innerWidth, rightIndex.y * window.innerHeight]}
+                                stroke={'red'}
+                                strokeWidth={8}
+                                lineCap={'round'}
+                                lineJoin={'round'}
+                            />
 
-                {/*            /!*<TextWithGroup*!/*/}
-                {/*            /!*    x={leftIndex.x * window.innerWidth + (rightIndex.x * window.innerWidth - leftIndex.x * window.innerWidth) / 2}*!/*/}
-                {/*            /!*    y={leftIndex.y * window.innerHeight + (rightIndex.y * window.innerHeight - leftIndex.y * window.innerHeight) / 2}*!/*/}
-                {/*            /!*    timeout={6000}*!/*/}
-                {/*            /!*    following={false}*!/*/}
-                {/*            /!*    text={Math.floor(dist(leftIndex.x * window.innerWidth, leftIndex.y * window.innerHeight, rightIndex.x * window.innerWidth, rightIndex.y * window.innerHeight))}/>*!/*/}
+                            <TextWithGroup
+                                x={leftIndex.x * window.innerWidth + (rightIndex.x * window.innerWidth - leftIndex.x * window.innerWidth) / 2}
+                                y={leftIndex.y * window.innerHeight + (rightIndex.y * window.innerHeight - leftIndex.y * window.innerHeight) / 2}
+                                timeout={6000}
+                                following={false}
+                                text={Math.floor(dist(leftIndex.x * window.innerWidth, leftIndex.y * window.innerHeight, rightIndex.x * window.innerWidth, rightIndex.y * window.innerHeight))}/>
 
-                {/*        </>*/}
+                        </>
 
-                {/*        : <></>*/}
-                {/*}*/}
+                        : <></>
+                }
 
                 {
                     // Live Typography

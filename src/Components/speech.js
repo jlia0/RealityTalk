@@ -10,7 +10,7 @@ const recognition = new SpeechRecognition()
 
 let finalTranscript = '';
 
-console.log(recognition)
+// console.log(recognition)
 
 function Speech() {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ function Speech() {
         socket.on('message', (data) => {
             let json = JSON.parse(data)
 
-            // console.log(json)
+            console.log(json)
 
             // filter
             json.tokens = json.tokens.filter((token) => {
@@ -69,7 +69,7 @@ function Speech() {
             // text = interimTranscript;
             text = text.replace(/(\r\n|\n|\r)/gm, ' ')
 
-            // console.log(text)
+            console.log(text)
 
             dispatch(setFinalTranscript(text))
             dispatch(setInterimTranscript(interimTranscript))

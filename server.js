@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
     })
 
     pyshell.on('message', (message) => {
-        // console.log(message)
+        console.log(message)
         socket.emit('message', message)
     })
 

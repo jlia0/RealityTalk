@@ -41,18 +41,18 @@ import {TextElement, withGroupWrapped, withGroupWrapped1} from "../figures/tease
 // import {to} from "react-spring";
 // import {image} from "html2canvas/dist/types/css/types/image";
 
-const intro_t1 = () => <TextElement text={"Jian Liao         \n\n"} text_color={"#3861e5"} tag_color={'white'} size={60}
-                                    style={'bold'}
-                                    opacity={0.8}/>
-const intro_t2 = () => <TextElement y={100} text={"Undergrad Student\nUniversity of Calgary"} text_color={"#3861e5"}
-                                    tag_color={'white'} size={35} style={'normal'} opacity={0}/>
-const Intro = withGroupWrapped(intro_t1, intro_t2)
-//
-//
-const aug = () => <TextElement text={"Augmented Presentation"} text_color={"#075204"} tag_color={'lightgreen'} size={30}
-                               style={'normal'}
-                               opacity={0.5}/>;
-const Aug = withGroupWrapped1(aug)
+// const intro_t1 = () => <TextElement text={"Jian Liao         \n\n"} text_color={"#3861e5"} tag_color={'white'} size={60}
+//                                     style={'bold'}
+//                                     opacity={0.8}/>
+// const intro_t2 = () => <TextElement y={100} text={"Undergrad Student\nUniversity of Calgary"} text_color={"#3861e5"}
+//                                     tag_color={'white'} size={35} style={'normal'} opacity={0}/>
+// const Intro = withGroupWrapped(intro_t1, intro_t2)
+// //
+// //
+// const aug = () => <TextElement text={"Augmented Presentation"} text_color={"#075204"} tag_color={'lightgreen'} size={30}
+//                                style={'normal'}
+//                                opacity={0.5}/>;
+// const Aug = withGroupWrapped1(aug)
 //
 // const aug_text = () => <TextElement text={"Augmented Reality\n          Interface"} text_color={"#600b98"}
 //                                     tag_color={'#be67f8'} size={50} style={'bold'}
@@ -61,16 +61,16 @@ const Aug = withGroupWrapped1(aug)
 //
 // const AR = withGroupWrapped(aug_text, aug_img)
 //
-const fe = () => <TextElement text={"Features                                       \n\n\n\n"} text_color={"#943b0b"}
-                              tag_color={'#f5a478'} size={28}
-                              style={'bold'}
-                              opacity={0.3}/>
-const liste = () => <TextElement y={45}
-                                 text={"1. Live kinetic typography\n2. Embedded visuals\n3. Embedded icons\n4. Annotations to a physical object"}
-                                 text_color={"#943b0b"}
-                                 tag_color={'white'} size={25} style={'normal'} opacity={0}/>
-
-const Feature = withGroupWrapped(fe, liste)
+// const fe = () => <TextElement text={"Features                                       \n\n\n\n"} text_color={"#943b0b"}
+//                               tag_color={'#f5a478'} size={28}
+//                               style={'bold'}
+//                               opacity={0.3}/>
+// const liste = () => <TextElement y={45}
+//                                  text={"1. Live kinetic typography\n2. Embedded visuals\n3. Embedded icons\n4. Annotations to a physical object"}
+//                                  text_color={"#943b0b"}
+//                                  tag_color={'white'} size={25} style={'normal'} opacity={0}/>
+//
+// const Feature = withGroupWrapped(fe, liste)
 //
 // const ge = () => <TextElement text={"gestural interaction"} text_color={"#600b98"}
 //                               tag_color={'#be67f8'} size={40} style={'bold'}

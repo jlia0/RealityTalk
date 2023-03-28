@@ -27,6 +27,7 @@ function App() {
             <>
                 <Speech/>
                 <ReadMapping/>
+                {/*Turn off color tracking because it's too slow*/}
                 {/*<ColorTracking/>*/}
                 {/*{isObjectMode === true ? <ColorTracking/> : null}*/}
                 {/*<TestSpeech/>*/}

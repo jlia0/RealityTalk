@@ -41,37 +41,6 @@ export function withGroup(Wrapped) {
                 }
             }, timeout);
 
-            // if (timeout === initialTimeout.current) {
-            //     timer.current = setTimeout(() => {
-            //         if (groupRef.current !== null) {
-            //             groupRef.current.to({
-            //                 scaleX: 0,
-            //                 scaleY: 0,
-            //                 opacity: 0,
-            //                 easing: Konva.Easings.BackEaseInOut,
-            //                 duration: 0.4
-            //             })
-            //             setTimeout(() => groupRef.current.destroy(), 400)
-            //         }
-            //     }, timeout);
-            // } else {
-            //     clearTimeout(timer.current);
-            //     // console.log("clear timer", timeout)
-            //     timer.current = setTimeout(() => {
-            //         if (groupRef.current !== null) {
-            //             groupRef.current.to({
-            //                 scaleX: 0,
-            //                 scaleY: 0,
-            //                 opacity: 0,
-            //                 easing: Konva.Easings.BackEaseInOut,
-            //                 duration: 0.4
-            //             })
-            //             setTimeout(() => groupRef.current.destroy(), 400)
-            //         }
-            //     }, timeout);
-            // }
-            //
-            // initialTimeout.current = timeout;
 
         }, [groupRef])
 

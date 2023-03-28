@@ -9,6 +9,9 @@ export function ReadMapping() {
 
     // let csvString = ''
 
+    // TODO write a function to read the csv file
+
+
     let csvString = `university of calgary\thttps://firebasestorage.googleapis.com/v0/b/petionshipplus.appspot.com/o/uofc.png?alt=media&token=2d616f96-6593-41e5-b40a-2d0f6708e116
 intersection\thttps://firebasestorage.googleapis.com/v0/b/petionshipplus.appspot.com/o/inte.png?alt=media&token=ad480048-6278-494b-ab92-c20d08ae0cce
 realitytalk\thttps://firebasestorage.googleapis.com/v0/b/petionshipplus.appspot.com/o/rt.mp4?alt=media&token=7aee9235-5d7b-4db7-9044-7c9f548ea972

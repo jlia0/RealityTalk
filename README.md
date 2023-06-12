@@ -2,16 +2,22 @@
 
 ## Paper, Video, Project Page, and Talk
 https://dl.acm.org/doi/10.1145/3526113.3545702
+
 https://arxiv.org/abs/2208.06350
+
 https://www.youtube.com/watch?v=vfIMeICV-7c
+
 https://ilab.ucalgary.ca/realitytalk/
+
 https://www.youtube.com/watch?v=VkC54ZNO_HU&t=12562s
 
 ## How to run:
-```npm install
+```
+npm install
 npm run spacy-install
 node server.js
-npm run start```
+npm run start
+```
 
 ## Future work:
 1. Migrate color tracking, hand tracking, and speech recognition to the server side or web worker

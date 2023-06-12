@@ -24,9 +24,9 @@ npm run start
 2. Add a CSV reader to read mapping information from CSV files
 3. Replace WebSpeech API with more robust and accurate speech recognition API such as Whisper.cpp
 4. Semi-Automated suggestions for generated contents or content retrieval
-  4.1. Add a Google Image search API to do real-time image search
-  4.2. DALL-E or Stable Diffusion
-  4.3. Document loaders and retrievers
+- 4.1. Add a Google Image search API to do real-time image search
+- 4.2. DALL-E or Stable Diffusion
+4.3. Document loaders and retrievers
 5. Customizability of the presentation
 6. Semantic cues from the real-time speech (not just nouns)
 ... and more on future work
